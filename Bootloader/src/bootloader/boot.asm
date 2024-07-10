@@ -147,7 +147,7 @@ readFinish:
     mov dl, [ebr_drive_number]
     mov ax, kernel_load_segment
     mov ds, ax
-    mov ex, ax
+    mov es, ax
 
     jmp kernel_load_segment:kernel_load_offset
 
