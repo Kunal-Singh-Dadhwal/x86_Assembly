@@ -4,11 +4,11 @@ BITS 16
 jmp short main
 nop
 
-bdb_oem: db "MSWIN4.1"          ;Disk Headers
+bdb_oem: db 'MSWIN4.1'          ;Disk Headers
 bdb_byte_per_sector: dw 512
 bdb_sectors_per_cluster: db 1
 bdb_reserved_sectors: dw 1
-bdb_fat_count: db 1
+bdb_fat_count: db 2
 bdb_dir_entries_count: dw 0E0h
 bdb_total_sectors: dw 2880
 bdb_media_descriptor_type: db 0F0h
@@ -22,9 +22,9 @@ bdb_large_secotr_count: dd 0
 ebr_drive_number:   db 0
                     db 0
 ebr_signature: db 29h
-ebr_volume_id: db 12h,34h,56h,78h
-ebr_volume_label: db "UwUntu"
-ebr_system_id: db "FAT12"
+ebr_volume_id: db 12h, 34h, 56h, 78h
+ebr_volume_label: db ' UwUntu '
+ebr_system_id: db 'FAT12  '
 main:
     mov ax, 0
     mov ds, ax
@@ -32,6 +32,10 @@ main:
     mov ss, ax
 
     mov sp, 0x7C00
+
+    mov si, boot_msg
+    call print
+
 
     mov [ebr_drive_number], dl      ;Reading disk sector
     mov al, 1
@@ -247,16 +251,17 @@ done_print:
     pop si
     ret
 
-boot_msg: db "Our OS has booted!", 0x0D, 0x0A, 0
-TIMES 510-($-$$) db 0
-file_kernel_bin db "KERNEL  BIN"
-msg_kernel_not_found db "KERNEL.BIN not found!"
+boot_msg: db 'Our OS has booted!', 0x0D, 0x0A, 0
+read_failure db 'Failed to read disk', 0x0D, 0x0A, 0
+file_kernel_bin db 'KERNEL  BIN'
+msg_kernel_not_found db 'KERNEL.BIN not found!'
 kernel_cluster dw 0
 
 kernel_load_segment equ 0x2000
 kernel_load_offset equ 0
 
-read_failure db "Failed to read disk", 0x0D, 0x0A, 0
+
+TIMES 510-($-$$) db 0
 DW 0AA55h 
 
 buffer: 
