@@ -16,7 +16,7 @@ bdb_sectors_per_fat: dw 9
 bdb_sector_per_track: dw 18
 bdb_heads: dw 2
 bdb_hidden_sectors: dd 0
-bdb_large_secotr_count: dd 0
+bdb_large_sector_count: dd 0
 
 ;extended boot record
 ebr_drive_number:   db 0
